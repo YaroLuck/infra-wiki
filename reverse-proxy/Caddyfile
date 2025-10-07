@@ -1,0 +1,8 @@
+{
+    email {$CADDY_EMAIL}
+}
+
+{$WIKI_DOMAIN} {
+    encode zstd gzip
+    reverse_proxy docmost:3000
+}
