@@ -20,12 +20,13 @@ docker-data/
 # ─────────────────────────────
 # DocMost / конфигурация
 # ─────────────────────────────
-docmost/.env                 # реальные секреты
+docmost/.env              
 docmost/.env.local
 docmost/storage/
 docmost/data/
 docmost/logs/
 docmost/uploads/
+reverse-proxy/.env
 
 # ─────────────────────────────
 # Бэкапы и дампы
