@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  docmost:
+    image: docmost/docmost:latest
+    container_name: docmost
+    depends_on:
+      - db
+      - redis
+    env_file: .env
+    expose:
+      - "3000"
+    volumes:
+      - docmost_data:/app/data/storage
+    networks:
+      - web
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: docmost_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: docmost_redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  docmost_data:
+  db_data:
+  redis_data:
+
+networks:
+  web:
+    external: true
