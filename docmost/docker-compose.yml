@@ -5,8 +5,10 @@ services:
     image: docmost/docmost:latest
     container_name: docmost
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file: .env
     expose:
       - "3000"
@@ -15,6 +17,12 @@ services:
     networks:
       - web
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
 
   db:
     image: postgres:16-alpine
@@ -25,7 +33,15 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - web
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
   redis:
     image: redis:7.2-alpine
@@ -33,7 +49,15 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis_data:/data
+    networks:
+      - web
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   docmost_data:
@@ -43,3 +67,4 @@ volumes:
 networks:
   web:
     external: true
+
