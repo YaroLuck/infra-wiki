@@ -1,6 +1,6 @@
 services:
   docmost:
-    image: docmost/docmost:latest
+    image: docmost/docmost:0.25.2
     container_name: docmost
     depends_on:
       db:
@@ -18,7 +18,7 @@ services:
       - web
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health" ]
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
