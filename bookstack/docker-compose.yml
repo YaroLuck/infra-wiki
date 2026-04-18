@@ -20,8 +20,8 @@ services:
       PUID: 1000
       PGID: 1000
       DB_HOST: db
-      DB_USER: ${DB_USERNAME}
-      DB_PASS: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       APP_URL: https://${BOOKSTACK_DOMAIN}
       APP_KEY: ${APP_KEY}
