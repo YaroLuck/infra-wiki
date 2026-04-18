@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
 
   bookstack:
-    image: lscr.io/linuxserver/bookstack:latest
+    image: lscr.io/linuxserver/bookstack:23.03.3
     container_name: bookstack
     environment:
       PUID: 1000
