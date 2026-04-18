@@ -4,5 +4,10 @@
 
 {$WIKI_DOMAIN} {
     encode zstd gzip
+    reverse_proxy bookstack:80
+}
+
+{$OLD_WIKI_DOMAIN} {
+    encode zstd gzip
     reverse_proxy docmost:3000
 }

@@ -1,0 +1,43 @@
+services:
+  db:
+    image: mariadb:11
+    container_name: bookstack_db
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - web
+    restart: unless-stopped
+
+  bookstack:
+    image: lscr.io/linuxserver/bookstack:latest
+    container_name: bookstack
+    environment:
+      PUID: 1000
+      PGID: 1000
+      DB_HOST: db
+      DB_USER: ${DB_USERNAME}
+      DB_PASS: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      APP_URL: https://${BOOKSTACK_DOMAIN}
+      APP_KEY: ${APP_KEY}
+    volumes:
+      - bookstack_data:/config
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - web
+    restart: unless-stopped
+
+networks:
+  web:
+    external: true
+
+volumes:
+  db_data:
+  bookstack_data:
